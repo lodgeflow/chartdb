@@ -1,5 +1,5 @@
 {
-    "name": "worker-name",
+    "name": "chartdb",
     "compatibility_date": "2025-12-14",
     "assets": {
         "directory": "./dist"
