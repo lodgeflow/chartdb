@@ -17,7 +17,22 @@ export async function onRequestPost(
         }: {
             workspaceId: string;
             diagramId: string;
-            table: any;
+            table: {
+                id: string;
+                name: string;
+                schema?: string;
+                x: number;
+                y: number;
+                fields?: unknown;
+                indexes?: unknown;
+                color?: string;
+                createdAt?: string | number | Date;
+                width?: number;
+                comment?: string;
+                isView?: boolean;
+                isMaterializedView?: boolean;
+                order?: number;
+            };
         } = body;
 
         if (!workspaceId || !diagramId || !table) {
@@ -90,7 +105,7 @@ export async function onRequestPut(
 
         const body = await request.json();
         const updates: string[] = [];
-        const values: any[] = [];
+        const values: (string | number | boolean | null | undefined)[] = [];
 
         if (body.name !== undefined) {
             updates.push('name = ?');
@@ -208,4 +223,3 @@ export async function onRequestDelete(
         );
     }
 }
-

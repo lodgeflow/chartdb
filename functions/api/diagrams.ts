@@ -259,9 +259,7 @@ async function getDiagramById(
     }
 ) {
     const diagramRow = await db
-        .prepare(
-            `SELECT * FROM diagrams WHERE id = ? AND workspace_id = ?`
-        )
+        .prepare(`SELECT * FROM diagrams WHERE id = ? AND workspace_id = ?`)
         .bind(diagramId, workspaceId)
         .first<DiagramRow>();
 
@@ -269,7 +267,78 @@ async function getDiagramById(
         return null;
     }
 
-    const diagram: any = {
+    interface DiagramResult {
+        id: string;
+        name: string;
+        databaseType: string;
+        databaseEdition?: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tables?: Array<{
+            id: string;
+            name: string;
+            schema: string;
+            x: number;
+            y: number;
+            fields: unknown;
+            indexes?: unknown;
+            color: string;
+            createdAt: Date;
+            width?: number;
+            comment?: string;
+            isView: boolean;
+            isMaterializedView: boolean;
+            order?: number;
+        }>;
+        relationships?: Array<{
+            id: string;
+            name: string;
+            sourceSchema: string;
+            sourceTableId: string;
+            targetSchema: string;
+            targetTableId: string;
+            sourceFieldId: string;
+            targetFieldId: string;
+            type: string;
+            createdAt: Date;
+        }>;
+        dependencies?: Array<{
+            id: string;
+            schema: string;
+            tableId: string;
+            dependentSchema: string;
+            dependentTableId: string;
+            createdAt: Date;
+        }>;
+        areas?: Array<{
+            id: string;
+            name: string;
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+            color: string;
+        }>;
+        customTypes?: Array<{
+            id: string;
+            schema: string;
+            type: string;
+            kind: string;
+            values?: unknown;
+            fields?: unknown;
+        }>;
+        notes?: Array<{
+            id: string;
+            content: string;
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+            color: string;
+        }>;
+    }
+
+    const diagram: DiagramResult = {
         id: diagramRow.id,
         name: diagramRow.name,
         databaseType: diagramRow.database_type,
@@ -285,7 +354,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.tables = tables.results?.map((row: any) => ({
+        diagram.tables = tables.results?.map((row) => ({
             id: row.id,
             name: row.name,
             schema: row.schema,
@@ -310,7 +379,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.relationships = relationships.results?.map((row: any) => ({
+        diagram.relationships = relationships.results?.map((row) => ({
             id: row.id,
             name: row.name,
             sourceSchema: row.source_schema,
@@ -331,7 +400,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.dependencies = dependencies.results?.map((row: any) => ({
+        diagram.dependencies = dependencies.results?.map((row) => ({
             id: row.id,
             schema: row.schema,
             tableId: row.table_id,
@@ -348,7 +417,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.areas = areas.results?.map((row: any) => ({
+        diagram.areas = areas.results?.map((row) => ({
             id: row.id,
             name: row.name,
             x: row.x,
@@ -366,7 +435,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.customTypes = customTypes.results?.map((row: any) => ({
+        diagram.customTypes = customTypes.results?.map((row) => ({
             id: row.id,
             schema: row.schema,
             type: row.type,
@@ -383,7 +452,7 @@ async function getDiagramById(
             )
             .bind(diagramId, workspaceId)
             .all();
-        diagram.notes = notes.results?.map((row: any) => ({
+        diagram.notes = notes.results?.map((row) => ({
             id: row.id,
             content: row.content,
             x: row.x,
@@ -424,4 +493,3 @@ async function listDiagrams(
 
     return result.filter((d) => d !== null);
 }
-

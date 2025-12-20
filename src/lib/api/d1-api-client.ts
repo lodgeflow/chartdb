@@ -129,7 +129,9 @@ class D1ApiClient {
                 name: attributes.name,
                 databaseType: attributes.databaseType,
                 databaseEdition: attributes.databaseEdition,
-                updatedAt: attributes.updatedAt?.toISOString() || new Date().toISOString(),
+                updatedAt:
+                    attributes.updatedAt?.toISOString() ||
+                    new Date().toISOString(),
             }),
         });
     }
@@ -146,10 +148,7 @@ class D1ApiClient {
     }
 
     // Table operations
-    async createTable(
-        diagramId: string,
-        table: DBTable
-    ): Promise<void> {
+    async createTable(diagramId: string, table: DBTable): Promise<void> {
         await this.request('/tables', {
             method: 'POST',
             body: JSON.stringify({
@@ -157,7 +156,9 @@ class D1ApiClient {
                 diagramId,
                 table: {
                     ...table,
-                    createdAt: table.createdAt?.toISOString() || new Date().toISOString(),
+                    createdAt:
+                        table.createdAt?.toISOString() ||
+                        new Date().toISOString(),
                 },
             }),
         });
@@ -201,7 +202,9 @@ class D1ApiClient {
                 diagramId,
                 relationship: {
                     ...relationship,
-                    createdAt: relationship.createdAt?.toISOString() || new Date().toISOString(),
+                    createdAt:
+                        relationship.createdAt?.toISOString() ||
+                        new Date().toISOString(),
                 },
             }),
         });
@@ -258,4 +261,3 @@ class D1ApiClient {
 }
 
 export const d1ApiClient = new D1ApiClient();
-

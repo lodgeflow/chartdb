@@ -15,7 +15,8 @@ import type { Note } from '@/lib/domain/note';
 import { d1ApiClient } from '@/lib/api/d1-api-client';
 
 // Check if D1 sync is enabled (can be controlled via environment variable)
-const D1_SYNC_ENABLED = (import.meta.env?.VITE_D1_SYNC_ENABLED ?? 'true') !== 'false';
+const D1_SYNC_ENABLED =
+    (import.meta.env?.VITE_D1_SYNC_ENABLED ?? 'true') !== 'false';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -279,7 +280,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         async (config) => {
             // Update local first
             await db.config.update(1, config);
-            
+
             // Sync to D1
             if (D1_SYNC_ENABLED) {
                 try {
@@ -423,7 +424,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             // Sync to D1
             if (D1_SYNC_ENABLED) {
                 try {
-                    await d1ApiClient.createRelationship(diagramId, relationship);
+                    await d1ApiClient.createRelationship(
+                        diagramId,
+                        relationship
+                    );
                 } catch (error) {
                     console.warn('Failed to sync relationship to D1:', error);
                 }
@@ -461,7 +465,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     try {
                         await d1ApiClient.updateRelationship(id, attributes);
                     } catch (error) {
-                        console.warn('Failed to sync relationship update to D1:', error);
+                        console.warn(
+                            'Failed to sync relationship update to D1:',
+                            error
+                        );
                     }
                 }
             },
@@ -479,7 +486,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     try {
                         await d1ApiClient.deleteRelationship(id);
                     } catch (error) {
-                        console.warn('Failed to sync relationship deletion to D1:', error);
+                        console.warn(
+                            'Failed to sync relationship deletion to D1:',
+                            error
+                        );
                     }
                 }
             },
@@ -770,10 +780,14 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     // Also sync all related entities
                     await Promise.all([
                         ...tables.map((table) =>
-                            d1ApiClient.createTable(diagram.id, table).catch(console.warn)
+                            d1ApiClient
+                                .createTable(diagram.id, table)
+                                .catch(console.warn)
                         ),
                         ...relationships.map((relationship) =>
-                            d1ApiClient.createRelationship(diagram.id, relationship).catch(console.warn)
+                            d1ApiClient
+                                .createRelationship(diagram.id, relationship)
+                                .catch(console.warn)
                         ),
                     ]);
                 } catch (error) {
@@ -806,7 +820,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             // Try D1 first, fallback to IndexedDB
             if (D1_SYNC_ENABLED) {
                 try {
-                    const remoteDiagrams = await d1ApiClient.listDiagrams(options);
+                    const remoteDiagrams =
+                        await d1ApiClient.listDiagrams(options);
                     if (remoteDiagrams && remoteDiagrams.length > 0) {
                         // Sync to local
                         for (const diagram of remoteDiagrams) {
@@ -915,7 +930,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             // Try D1 first, fallback to IndexedDB
             if (D1_SYNC_ENABLED) {
                 try {
-                    const remoteDiagram = await d1ApiClient.getDiagram(id, options);
+                    const remoteDiagram = await d1ApiClient.getDiagram(
+                        id,
+                        options
+                    );
                     if (remoteDiagram) {
                         // Sync to local
                         await db.diagrams.put({
@@ -1039,7 +1057,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 try {
                     await d1ApiClient.deleteDiagram(id);
                 } catch (error) {
-                    console.warn('Failed to sync diagram deletion to D1:', error);
+                    console.warn(
+                        'Failed to sync diagram deletion to D1:',
+                        error
+                    );
                 }
             }
         },

@@ -17,14 +17,24 @@ export async function onRequestPost(
         }: {
             workspaceId: string;
             diagramId: string;
-            relationship: any;
+            relationship: {
+                id: string;
+                name?: string;
+                sourceSchema?: string;
+                sourceTableId: string;
+                targetSchema?: string;
+                targetTableId: string;
+                sourceFieldId?: string;
+                targetFieldId?: string;
+                type: string;
+                createdAt?: string | number | Date;
+            };
         } = body;
 
         if (!workspaceId || !diagramId || !relationship) {
             return new Response(
                 JSON.stringify({
-                    error:
-                        'workspaceId, diagramId, and relationship are required',
+                    error: 'workspaceId, diagramId, and relationship are required',
                 }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
@@ -88,7 +98,7 @@ export async function onRequestPut(
 
         const body = await request.json();
         const updates: string[] = [];
-        const values: any[] = [];
+        const values: (string | null | undefined)[] = [];
 
         if (body.name !== undefined) {
             updates.push('name = ?');
@@ -190,4 +200,3 @@ export async function onRequestDelete(
         );
     }
 }
-
