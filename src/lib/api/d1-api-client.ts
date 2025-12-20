@@ -156,9 +156,9 @@ class D1ApiClient {
                 diagramId,
                 table: {
                     ...table,
-                    createdAt:
-                        table.createdAt?.toISOString() ||
-                        new Date().toISOString(),
+                    createdAt: table.createdAt
+                        ? new Date(table.createdAt).toISOString()
+                        : new Date().toISOString(),
                 },
             }),
         });
@@ -202,9 +202,9 @@ class D1ApiClient {
                 diagramId,
                 relationship: {
                     ...relationship,
-                    createdAt:
-                        relationship.createdAt?.toISOString() ||
-                        new Date().toISOString(),
+                    createdAt: relationship.createdAt
+                        ? new Date(relationship.createdAt).toISOString()
+                        : new Date().toISOString(),
                 },
             }),
         });
