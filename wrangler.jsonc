@@ -1,15 +1,30 @@
 {
-	"name": "chartdb",
-	"compatibility_date": "2025-12-14",
-	"assets": {
-		"directory": "./dist"
-	},
-	"d1_databases": [
-		{
-			"binding": "chartdb",
-			"database_name": "chartdb",
-			"database_id": "e4f44947-b568-4c74-9d1e-fac5e05ed268",
-			"remote": true
-		}
-	]
+    "name": "chartdb",
+    "compatibility_date": "2025-12-14",
+    "assets": {
+        "directory": "./dist",
+    },
+    "d1_databases": [
+        {
+            "binding": "chartdb",
+            "database_name": "chartdb",
+            "database_id": "e4f44947-b568-4c74-9d1e-fac5e05ed268",
+            "remote": true,
+        },
+    ],
+    "observability": {
+        "enabled": false,
+        "head_sampling_rate": 1,
+        "logs": {
+            "enabled": true,
+            "head_sampling_rate": 1,
+            "persist": true,
+            "invocation_logs": true,
+        },
+        "traces": {
+            "enabled": false,
+            "persist": true,
+            "head_sampling_rate": 1,
+        },
+    },
 }
